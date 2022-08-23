@@ -16,6 +16,25 @@ def generateEmptyGraph(n):
     return incidence_matrix
 
 
+def generateRandomGraph(n, max_edges = None):
+    """generates a random graph on n vertices"""
+    import random
+    if max_edges == None:
+        max_edges = (n*(n-1))//2
+    graph = generateEmptyGraph(n)
+    for i in range(n-1):
+        for j in range(i+1,n):
+            rand = 0
+            if max_edges > 0:
+                rand = random.randint(0, 1)
+            graph[i][j] = rand
+            graph[j][i] = rand
+            if rand >= 1:
+                max_edges -= 1
+    return graph
+    
+
+
 def increment_matrix(matrix, compliments_r_equal = True):
     """
     Input: -an adjacency matrix of a graph, in the form of an array of arrays
@@ -65,6 +84,28 @@ def num_edges(graph):
     for row in graph:
         num_edges += sum(row)
     return num_edges/2
+
+
+def neighbourhood(graph, v):
+    neighbours = []
+    row = graph[v-1]
+    for vertex in range(len(row)):
+        if row[vertex] == 1:
+            neighbours.append(vertex+1)
+    return neighbours
+
+
+def is_connected(graph):
+    domain = set(neighbourhood(graph, 1))
+    size = 0
+    while size < len(domain):
+        size = len(domain)
+        additions = set()
+        for v in domain:
+            additions.update(neighbourhood(graph, v))
+        domain.update(additions)
+    return len(domain) == len(graph)
+    
 
 
     

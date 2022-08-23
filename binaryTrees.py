@@ -31,7 +31,19 @@ def binTrees(n):
     """
     Input: a positive integer n
     Output: an array containing all 'distinct' unabelled binary trees on
-    n vertices
+    n vertices.
+    
+    Trees are represented by a list of length n-1. The i-th entry refers to
+    the number of *internal* nodes which are children of the i-th
+    node.
+    e.g [2,2,0,0,0] is
+         *                             2
+        / \                           / \   
+       *   *                         2   0   
+      / \  /\                       / \  /\   
+     *   * l l                     0   0 l l    
+    / \  /\                       / \  /\            
+   l  l  l l                      l  l l l
     """
     if n == 0:
         return [[],]
@@ -88,6 +100,7 @@ def combine(left, right):
         right_count += track
         track = 0
     return new_tree
+    
         
         
 
