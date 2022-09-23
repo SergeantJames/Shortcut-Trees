@@ -10,7 +10,7 @@ class PShortcutTree():
     """
     
     Key
-    -vertices are labelled between [-n,n-1).
+    -vertices are labelled between [-n,n-2].
     -The negative labels refer to the leaves -- specifically, the vertex
     labelled -k is the k-th vertex of the graph.
     -the non-negative labels refer to the internal nodes with that index 
@@ -44,6 +44,26 @@ class PShortcutTree():
         for i in range(self.size):
             self.perm.append(i)
             #self.inv_perm[i] = i
+    
+    
+    def __str__(self):
+        current_line = [0,]
+        output = ""
+        
+        while current_line != []:
+            next_line = []
+            for vertex in current_line:
+                next_line.extend(self.get_children(vertex))
+                if vertex >= 0:
+                    output = output + "  " + str(vertex)
+                else:
+                    output = output + " " + str(vertex)
+            current_line = next_line
+            del next_line
+            output = output + "\n"
+        output = output + "Black Edges: " + str(self.black_edges)
+        output = output + "\nWhite Edges: " + str(self.white_edges)
+        return output
     
     
     def write_graph_on_tree(self, graph):
@@ -130,9 +150,13 @@ class PShortcutTree():
         return leaf_descendents
     
     
-    def find_minimal_perm(self):
+    def find_minimal_perm(self, count_both_edge_sets=False):
         """Finds a permutation for the graph and tree which produces the
-        shortcut tree with the fewest shortcut edges"""
+        shortcut tree with the fewest shortcut edges.
+        if count_both_edge_sets is False (by default), the function only counts
+        the size of the smallest shortcut set when determining the number of
+        shortcuts. If True, it will take the number of shortcuts to be the
+        combined size of the two shortcut sets."""
         import itertools
         best_perm = self.perm
         best_edges = (self.size)**2
@@ -140,22 +164,29 @@ class PShortcutTree():
         for p in itertools.permutations(range(self.size)):
             self.perm = p
             self.write_graph_on_tree(self.graph)
-            if len(self.black_edges) < best_edges:
-                best_edges = len(self.black_edges)
-                best_perm = p    
-            if len(self.white_edges) < best_edges:
-                best_edges = len(self.white_edges)
-                best_perm = p
+            if count_both_edge_sets:
+                if self.shortcut_number() < best_edges:
+                    best_edges = self.shortcut_number()
+                    best_perm = p
+            else:
+                if len(self.black_edges) < best_edges:
+                    best_edges = len(self.black_edges)
+                    best_perm = p    
+                if len(self.white_edges) < best_edges:
+                    best_edges = len(self.white_edges)
+                    best_perm = p
         return best_perm
     
     
-    def minimize_shortcuts(self, graph):
+    def minimize_shortcuts(self, graph, count_both_edge_sets=False):
         """Finds the permutation which minimises the shortcut edges.
         Returns the minimal number of shortcuts needed to encode graph
         onto self.tree"""
         self.graph = graph
-        self.perm = self.find_minimal_perm()
+        self.perm = self.find_minimal_perm(count_both_edge_sets)
         self.write_graph_on_tree(graph)
+        if count_both_edge_sets:
+            return self.shortcut_number()
         return min(len(self.black_edges), len(self.white_edges))
         
 
@@ -165,6 +196,7 @@ class PShortcutTree():
         return len(self.black_edges) + len(self.white_edges)
     
     def min_shortcuts(self):
+        "Returns the size (int) of the smallest shortcut set."
         return min(len(self.black_edges), len(self.white_edges))
     
     

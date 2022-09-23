@@ -28,6 +28,7 @@ def constructSAT(graph):
 
 
 def twin_width(graph):
+    """Returns the twin width of graph"""
     for d in range(len(graph)):
         if bounded_twin_width(graph, d):
             return d
@@ -35,6 +36,7 @@ def twin_width(graph):
 
 
 def twin_width_2(graph):
+    """Returns the twin width of graph"""
     for d in range(len(graph), -1, -1):
         if not bounded_twin_width(graph, d):
             return d + 1
@@ -42,6 +44,7 @@ def twin_width_2(graph):
 
 
 def bounded_twin_width(graph, d):
+    """Returns True if graph has twin width <= d, False otherwise"""
     n = len(graph)
     SAT = constructSAT(graph)
     for i in range(1,n):

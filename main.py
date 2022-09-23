@@ -22,22 +22,22 @@ def run(n, immediate_return = True):
         
         sct = ShortcutTree(tree)
         sct.write_graph_on_tree(graph)
-        graphs.increment_matrix(graph)
         width = tww.twin_width(graph)
         if (2*width + 1)*(n-1) > sct.shortcut_number():
             if immediate_return:
                 return [tree, graph]
             counter_examples.append([tree, copy.deepcopy(graph)])
+        graphs.increment_matrix(graph)
         
         while graph != empty_graph:
             sct = ShortcutTree(tree)
             sct.write_graph_on_tree(graph)
-            graphs.increment_matrix(graph)
             width = tww.twin_width(graph)
             if (2*width + 1)*(n-1) > sct.shortcut_number():
                 if immediate_return:
                     return  [tree, graph]
                 counter_examples.append([tree, copy.deepcopy(graph)])
+            graphs.increment_matrix(graph)
     return counter_examples
 
 
@@ -103,4 +103,36 @@ def run2(n, leeway=0, immediate_return = True):
                 if immediate_return:
                     return  [tree, graph]
                 counter_examples.append([tree, copy.deepcopy(graph)])
+    return counter_examples
+
+
+def run_on_cubics(n, immediate_return = True):
+    counter_examples = []
+    trees = binaryTrees.binTrees(n-1)
+    
+    for tree in trees:
+        graph = graphs.generateEmptyGraph(n)
+        empty_graph = graphs.generateEmptyGraph(n)
+        
+        sct = ShortcutTree(tree)
+        sct.write_graph_on_tree(graph)
+        graphs.increment_matrix(graph)
+        width = tww.twin_width(graph)
+        if (2*width + 1)*(n-1) > sct.shortcut_number():
+            if immediate_return:
+                return [tree, graph]
+            counter_examples.append([tree, copy.deepcopy(graph)])
+        
+        while graph != empty_graph:
+            if not graphs.is_cubic(graph):
+                graphs.increment_matrix(graph)
+                continue
+            sct = ShortcutTree(tree)
+            sct.write_graph_on_tree(graph)
+            width = tww.twin_width(graph)
+            if (2*width + 1)*(n-1) > sct.shortcut_number():
+                if immediate_return:
+                    return  [tree, graph]
+                counter_examples.append([tree, copy.deepcopy(graph)])
+            graphs.increment_matrix(graph)
     return counter_examples

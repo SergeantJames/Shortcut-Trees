@@ -16,6 +16,24 @@ def btnumber(n):
     return output
 
 
+btnumber_dict = {}
+def fastbtnumber(n):
+    if n in btnumber_dict.keys():
+        return btnumber_dict[n]
+    output = 0
+    if n in [0,1]:
+        output = 1
+    elif n%2 == 0:
+        for i in range(int(n/2)):
+            output += fastbtnumber(i)*fastbtnumber(n-1-i)
+    elif n%2 != 0:
+        for i in range(int((n-1)/2)):
+            output += fastbtnumber(i)*fastbtnumber(n-1-i)
+        output += choose2(fastbtnumber((n-1)/2)+1)
+    btnumber_dict[n] = output
+    return output
+
+
 def factorial(n):
     if n == 0:
         return 1
@@ -27,11 +45,15 @@ def choose(n,k):
     return int(factorial(n)/(factorial(k)*factorial(n-k)))
 
 
+def choose2(n):
+    return (n*(n-1))//2
+
+
 def binTrees(n):
     """
     Input: a positive integer n
-    Output: an array containing all 'distinct' unabelled binary trees on
-    n vertices.
+    Output: an array containing all 'distinct' unabelled full binary trees on
+    2n+1 vertices.
     
     Trees are represented by a list of length n-1. The i-th entry refers to
     the number of *internal* nodes which are children of the i-th

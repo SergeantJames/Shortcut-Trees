@@ -68,6 +68,10 @@ def num_graphs(n, compliments_r_equal = True):
            -a boolean, default to True. If True, treats complimentary graphs as
            identical, so halves the total number of graphs.
     Output: the number (int) of graphs on n vertices
+    
+    Designed to verify that 'increment_matrix' works OK (number of graphs is
+    always 2**(nC2)) and to count how many graphs will be checked if
+    compliments_r_equal is True.
     """
     count = 1
     graph = generateEmptyGraph(n)
@@ -83,7 +87,7 @@ def num_edges(graph):
     num_edges = 0
     for row in graph:
         num_edges += sum(row)
-    return num_edges/2
+    return num_edges//2
 
 
 def neighbourhood(graph, v):
@@ -105,7 +109,22 @@ def is_connected(graph):
             additions.update(neighbourhood(graph, v))
         domain.update(additions)
     return len(domain) == len(graph)
-    
+
+
+def permute_graph(graph, perm):
+    size = len(graph)
+    output = generateEmptyGraph(size)
+    for i in range(size):
+        for j in range(size):
+            output[perm[i]][perm[j]] = graph[i][j]
+    return output
+
+
+def is_cubic(graph):
+    for vertex in graph:
+        if sum(vertex)!=3:
+            return False
+    return True
 
 
     

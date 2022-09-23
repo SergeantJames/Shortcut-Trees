@@ -10,7 +10,7 @@ class ShortcutTree():
     """
     
     Key
-    -vertices are labelled between [-n,n-1).
+    -vertices are labelled between [-n,n-2].
     -The negative labels refer to the leaves -- specifically, the vertex
     labelled -k is the k-th vertex of the graph.
     -the non-negative labels refer to the internal nodes with that index 
@@ -39,6 +39,26 @@ class ShortcutTree():
         self.size = len(tree) + 1
         self.black_edges = black_edges
         self.white_edges = white_edges
+    
+    
+    def __str__(self):
+        current_line = [0,]
+        output = ""
+        
+        while current_line != []:
+            next_line = []
+            for vertex in current_line:
+                next_line.extend(self.get_children(vertex))
+                if vertex >= 0:
+                    output = output + "  " + str(vertex)
+                else:
+                    output = output + " " + str(vertex)
+            current_line = next_line
+            del next_line
+            output = output + "\n"
+        output = output + "Black Edges: " + str(self.black_edges)
+        output = output + "\nWhite Edges: " + str(self.white_edges)
+        return output
     
     
     def write_graph_on_tree(self, graph):
