@@ -1,8 +1,3 @@
-Important: The graphReader module reads graphs from the 'simple graphs' folder. The graph files stored in this folder are those found at
-http://users.cecs.anu.edu.au/~bdm/data/graphs.html, particularly files graph2.g6 through graph11.g6. For size reasons, I have not included all
-of these in my code submission, so some functionality relying on this module may not work.
-
-
 Modules:
 
 bestTreeFinder
@@ -65,13 +60,4 @@ shortcutPerfectObjectFinder
 		perfect_tree_search() - searches for perfect trees on 4 or more nodes
 		perfect_graph_finder(n) - returns a shortcut perfect graph (or list of shortcut perfect graphs) on n vertices
 		find_minimal_shortcut_tree(graph) - returns the shortcut tree encoding of graph with the fewesr shortcuts
-
-graphReader
-	Reads graph files from the file 'simple graphs'
-	The simple graphs come from http://users.cecs.anu.edu.au/~bdm/data/graphs.html, maintained by Brendan McKay
-	For size reasons, I've not included this file in my submission
-
-	Main functions
-		getGraphs(n) - returns a list of all unlabelled graphs on n vertices
-		overGraphs(n) - generates all unlabelled graphs on n vertices
 
